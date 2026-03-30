@@ -254,6 +254,26 @@
 .topbar-user-name { font-size: 0.85rem; font-weight: 600; display: block; }
 .topbar-user-role { font-size: 0.72rem; color: var(--text-muted); display: block; }
 
+/* ── BREADCRUMB ──────────────────────────────────────── */
+.breadcrumb-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 28px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.78rem;
+}
+.breadcrumb-home {
+  color: var(--text-muted);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.breadcrumb-home:hover { color: var(--primary); }
+.breadcrumb-sep { color: var(--border); flex-shrink: 0; }
+.breadcrumb-current { color: var(--text-primary); font-weight: 600; }
+
 /* ── CONTENT ─────────────────────────────────────────── */
 .app-content {
   flex: 1;

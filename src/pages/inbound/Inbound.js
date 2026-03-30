@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PageHeader, Card, Section, Badge, DataTable, Btn, SearchBar, Modal, FormField, Input, Select, StatCard } from '../../components/common/Common';
+import { PageHeader, Card, Section, Badge, DataTable, Btn, SearchBar, Modal, FormField, Input, Select, StatCard, ExportBtn, StatusTimeline } from '../../components/common/Common';
 import { inboundShipments } from '../../data/mockData';
 import { PackageOpen, CheckCircle2, AlertTriangle, Truck, Plus, ScanLine } from 'lucide-react';
 import './Inbound.css';
@@ -10,6 +10,24 @@ const statusMap = {
   partial: ['warning', 'Partial Receipt'],
   complete: ['success', 'Complete'],
 };
+
+const INBOUND_TIMELINE_STEPS = [
+  { key: 'pending', label: 'Pending' },
+  { key: 'in_transit', label: 'In Transit' },
+  { key: 'partial', label: 'Partial Receipt' },
+  { key: 'complete', label: 'Complete' },
+];
+
+const EXPORT_COLUMNS = [
+  { key: 'id', label: 'PO Number' },
+  { key: 'supplier', label: 'Supplier' },
+  { key: 'product', label: 'Product' },
+  { key: 'sku', label: 'SKU' },
+  { key: 'expected', label: 'Expected Qty' },
+  { key: 'received', label: 'Received Qty' },
+  { key: 'eta', label: 'ETA' },
+  { key: 'status', label: 'Status' },
+];
 
 function StatusBadge({ status }) {
   const [type, label] = statusMap[status] || ['neutral', status];
@@ -57,12 +75,15 @@ export default function Inbound() {
       <Card noPad>
         <div className="table-toolbar">
           <SearchBar value={search} onChange={setSearch} placeholder="Search by PO, supplier, product..." />
-          <div className="filter-tabs">
-            {['all','pending','in_transit','partial','complete'].map(f => (
-              <button key={f} className={`filter-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
-                {f === 'all' ? 'All' : f === 'in_transit' ? 'In Transit' : f.charAt(0).toUpperCase() + f.slice(1)}
-              </button>
-            ))}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <div className="filter-tabs">
+              {['all','pending','in_transit','partial','complete'].map(f => (
+                <button key={f} className={`filter-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
+                  {f === 'all' ? 'All' : f === 'in_transit' ? 'In Transit' : f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+            </div>
+            <ExportBtn columns={EXPORT_COLUMNS} data={filtered} filename="inbound-shipments.csv" />
           </div>
         </div>
         <DataTable
@@ -108,6 +129,7 @@ export default function Inbound() {
       <Modal open={showReceiveModal} onClose={() => setShowReceiveModal(false)} title={`Receive Stock — ${selectedPO?.id}`} width={560}>
         {selectedPO && (
           <div>
+            <StatusTimeline steps={INBOUND_TIMELINE_STEPS} currentKey={selectedPO.status} />
             <div className="receive-po-info">
               <div className="receive-info-row"><span>Supplier</span><strong>{selectedPO.supplier}</strong></div>
               <div className="receive-info-row"><span>Product</span><strong>{selectedPO.product}</strong></div>

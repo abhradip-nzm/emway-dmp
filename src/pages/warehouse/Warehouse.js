@@ -1,8 +1,43 @@
 import React, { useState } from 'react';
-import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section, ProgressBar } from '../../components/common/Common';
-import { skuInventory, warehouseZones } from '../../data/mockData';
-import { Package, AlertTriangle, CheckCircle2, ScanLine, Plus, RefreshCw, BarChart2 } from 'lucide-react';
+import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section, ProgressBar, ExportBtn } from '../../components/common/Common';
+import { skuInventory, warehouseZones, stockLedger } from '../../data/mockData';
+import { Package, AlertTriangle, CheckCircle2, ScanLine, Plus, RefreshCw, ClipboardList, ArrowUp, ArrowDown, ArrowLeftRight, RotateCcw, Sliders } from 'lucide-react';
 import './Warehouse.css';
+
+const LEDGER_TYPE_MAP = {
+  inbound:    { label: 'Inbound',    icon: ArrowDown,      color: 'success' },
+  pick:       { label: 'Pick',       icon: ArrowUp,        color: 'warning' },
+  return:     { label: 'Return',     icon: RotateCcw,      color: 'info'    },
+  adjustment: { label: 'Adjustment', icon: Sliders,        color: 'neutral' },
+  transfer:   { label: 'Transfer',   icon: ArrowLeftRight, color: 'primary' },
+};
+
+function LedgerTypeBadge({ type }) {
+  const t = LEDGER_TYPE_MAP[type] || { label: type, color: 'neutral' };
+  return <span className={`status-badge ${t.color}`}>{t.label}</span>;
+}
+
+const LEDGER_EXPORT_COLUMNS = [
+  { key: 'date',      label: 'Date/Time' },
+  { key: 'type',      label: 'Type' },
+  { key: 'reference', label: 'Reference' },
+  { key: 'qty',       label: 'Qty Change', exportRender: v => (v > 0 ? `+${v}` : String(v)) },
+  { key: 'balance',   label: 'Balance' },
+  { key: 'user',      label: 'User' },
+  { key: 'notes',     label: 'Notes' },
+];
+
+const EXPORT_COLUMNS = [
+  { key: 'sku', label: 'SKU' },
+  { key: 'product', label: 'Product' },
+  { key: 'brand', label: 'Brand' },
+  { key: 'location', label: 'Location' },
+  { key: 'stock', label: 'On Hand' },
+  { key: 'reserved', label: 'Reserved' },
+  { key: 'available', label: 'Available' },
+  { key: 'reorderPoint', label: 'Reorder Point' },
+  { key: 'status', label: 'Status' },
+];
 
 function StockBadge({ status }) {
   const map = { healthy: ['success','Healthy'], low: ['warning','Low Stock'], out: ['danger','Out of Stock'] };
@@ -17,6 +52,8 @@ export default function Warehouse() {
   const [showAdjustModal, setShowAdjustModal] = useState(false);
   const [showCycleModal, setShowCycleModal] = useState(false);
   const [selectedSKU, setSelectedSKU] = useState(null);
+  const [showLedgerModal, setShowLedgerModal] = useState(false);
+  const [ledgerSKU, setLedgerSKU] = useState(null);
 
   const filtered = skuInventory.filter(s => {
     const m = s.sku.toLowerCase().includes(search.toLowerCase()) ||
@@ -69,12 +106,15 @@ export default function Warehouse() {
       <Card noPad>
         <div className="table-toolbar">
           <SearchBar value={search} onChange={setSearch} placeholder="Search SKU, product, brand..." />
-          <div className="filter-tabs">
-            {['all','healthy','low','out'].map(f => (
-              <button key={f} className={`filter-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
-                {f === 'all' ? 'All Stock' : f === 'low' ? 'Low Stock' : f === 'out' ? 'Out of Stock' : 'Healthy'}
-              </button>
-            ))}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <div className="filter-tabs">
+              {['all','healthy','low','out'].map(f => (
+                <button key={f} className={`filter-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
+                  {f === 'all' ? 'All Stock' : f === 'low' ? 'Low Stock' : f === 'out' ? 'Out of Stock' : 'Healthy'}
+                </button>
+              ))}
+            </div>
+            <ExportBtn columns={EXPORT_COLUMNS} data={filtered} filename="warehouse-inventory.csv" />
           </div>
         </div>
         <DataTable
@@ -89,13 +129,78 @@ export default function Warehouse() {
             { key: 'reorderPoint', label: 'Reorder Point' },
             { key: 'status', label: 'Status', render: v => <StockBadge status={v} /> },
             { key: 'sku', label: '', render: (v, row) => (
-              <Btn size="sm" variant="ghost" onClick={() => { setSelectedSKU(row); setShowAdjustModal(true); }}>Adjust</Btn>
+              <div style={{ display: 'flex', gap: 4 }}>
+                <Btn size="sm" variant="ghost" icon={ClipboardList} onClick={() => { setLedgerSKU(row); setShowLedgerModal(true); }}>Ledger</Btn>
+                <Btn size="sm" variant="ghost" onClick={() => { setSelectedSKU(row); setShowAdjustModal(true); }}>Adjust</Btn>
+              </div>
             )},
           ]}
           data={filtered}
           emptyText="No SKUs match your filter"
         />
       </Card>
+
+      {/* Stock Ledger Modal */}
+      <Modal
+        open={showLedgerModal}
+        onClose={() => { setShowLedgerModal(false); setLedgerSKU(null); }}
+        title={ledgerSKU ? `Stock Ledger — ${ledgerSKU.sku}` : 'Stock Ledger'}
+        width={720}
+      >
+        {ledgerSKU && (() => {
+          const entries = stockLedger[ledgerSKU.sku] || [];
+          return (
+            <div>
+              <div className="ledger-sku-info">
+                <div className="ledger-info-row"><span>Product</span><strong>{ledgerSKU.product}</strong></div>
+                <div className="ledger-info-row"><span>Location</span><strong>{ledgerSKU.location}</strong></div>
+                <div className="ledger-info-row"><span>Current Stock</span><strong>{ledgerSKU.stock} units</strong></div>
+                <div className="ledger-info-row"><span>Available</span><strong>{ledgerSKU.available} units</strong></div>
+              </div>
+              <div className="ledger-toolbar">
+                <h4 className="ledger-section-title">Movement History</h4>
+                <ExportBtn columns={LEDGER_EXPORT_COLUMNS} data={entries} filename={`ledger-${ledgerSKU.sku}.csv`} />
+              </div>
+              {entries.length === 0 ? (
+                <div className="empty-state"><p>No movements recorded for this SKU.</p></div>
+              ) : (
+                <div className="table-wrapper">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date / Time</th>
+                        <th>Type</th>
+                        <th>Reference</th>
+                        <th style={{ textAlign: 'right' }}>Qty Change</th>
+                        <th style={{ textAlign: 'right' }}>Balance</th>
+                        <th>User</th>
+                        <th>Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {entries.map(e => (
+                        <tr key={e.id}>
+                          <td className="ledger-date">{e.date}</td>
+                          <td><LedgerTypeBadge type={e.type} /></td>
+                          <td><span className="ledger-ref">{e.reference}</span></td>
+                          <td style={{ textAlign: 'right' }}>
+                            <span className={`ledger-qty ${e.qty > 0 ? 'positive' : 'negative'}`}>
+                              {e.qty > 0 ? `+${e.qty}` : e.qty}
+                            </span>
+                          </td>
+                          <td style={{ textAlign: 'right' }}><strong>{e.balance}</strong></td>
+                          <td>{e.user}</td>
+                          <td className="ledger-notes">{e.notes || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+      </Modal>
 
       {/* Stock Adjustment Modal */}
       <Modal open={showAdjustModal} onClose={() => { setShowAdjustModal(false); setSelectedSKU(null); }}

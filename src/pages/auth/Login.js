@@ -1,18 +1,43 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useApp, DEMO_USERS, ROLE_LABELS } from '../../context/AppContext';
-import { Package, ChevronDown } from 'lucide-react';
+import { useApp, DEMO_USERS, ROLE_LABELS, ROLES } from '../../context/AppContext';
+import { Package, ChevronDown, ChevronRight } from 'lucide-react';
 import './Login.css';
+
+// Group users by role
+const usersByRole = DEMO_USERS.reduce((acc, u) => {
+  if (!acc[u.role]) acc[u.role] = [];
+  acc[u.role].push(u);
+  return acc;
+}, {});
+
+const ALL_ROLES = Object.entries(ROLE_LABELS).map(([key, label]) => ({ key, label }));
 
 export default function Login() {
   const { login } = useApp();
   const navigate = useNavigate();
-  const [selected, setSelected] = useState(null);
-  const [open, setOpen] = useState(false);
+
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [roleOpen, setRoleOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [userOpen, setUserOpen] = useState(false);
+
+  const usersForRole = selectedRole ? (usersByRole[selectedRole] || []) : [];
+
+  const handleRoleSelect = (roleKey) => {
+    setSelectedRole(roleKey);
+    setSelectedUser(null);
+    setRoleOpen(false);
+  };
+
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    setUserOpen(false);
+  };
 
   const handleLogin = () => {
-    if (!selected) return;
-    login(selected);
+    if (!selectedUser) return;
+    login(selectedUser);
     navigate('/dashboard');
   };
 
@@ -55,37 +80,83 @@ export default function Login() {
         <div className="login-card">
           <div className="login-card-header">
             <h2>Welcome back</h2>
-            <p>Select your role to enter the demo environment</p>
+            <p>Select your role and user to enter the demo environment</p>
           </div>
 
           <div className="login-form">
-            <label className="login-label">Select User / Role</label>
-            <div className="login-dropdown" onClick={() => setOpen(!open)}>
-              {selected ? (
+
+            {/* ── Step 1: Role ── */}
+            <div className="login-step-label">
+              <span className="login-step-num">1</span>
+              <label className="login-label">Select Role</label>
+            </div>
+            <div className="login-dropdown" onClick={() => { setRoleOpen(o => !o); setUserOpen(false); }}>
+              {selectedRole ? (
                 <div className="login-selected">
-                  <div className="login-avatar small">{selected.avatar}</div>
+                  <div className="login-role-dot" />
                   <div>
-                    <div className="login-selected-name">{selected.name}</div>
-                    <div className="login-selected-role">{ROLE_LABELS[selected.role]}</div>
+                    <div className="login-selected-name">{ROLE_LABELS[selectedRole]}</div>
                   </div>
                 </div>
               ) : (
-                <span className="login-placeholder">Choose a demo user...</span>
+                <span className="login-placeholder">Choose a role...</span>
               )}
-              <ChevronDown size={16} className={`login-chevron ${open ? 'open' : ''}`} />
+              <ChevronDown size={16} className={`login-chevron ${roleOpen ? 'open' : ''}`} />
             </div>
-            {open && (
+            {roleOpen && (
               <div className="login-dropdown-list">
-                {DEMO_USERS.map(u => (
+                {ALL_ROLES.map(r => (
+                  <div
+                    key={r.key}
+                    className={`login-dropdown-item login-role-item ${selectedRole === r.key ? 'active' : ''}`}
+                    onClick={() => handleRoleSelect(r.key)}
+                  >
+                    <div className="login-role-icon">
+                      {r.label.charAt(0)}
+                    </div>
+                    <span className="login-role-label">{r.label}</span>
+                    {selectedRole === r.key && <ChevronRight size={14} style={{ marginLeft: 'auto', color: 'var(--primary)' }} />}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* ── Step 2: User ── */}
+            <div className={`login-step-label ${!selectedRole ? 'login-step-disabled' : ''}`}>
+              <span className="login-step-num">2</span>
+              <label className="login-label">Select User</label>
+            </div>
+            <div
+              className={`login-dropdown ${!selectedRole ? 'login-dropdown-disabled' : ''}`}
+              onClick={() => { if (selectedRole) { setUserOpen(o => !o); setRoleOpen(false); } }}
+            >
+              {selectedUser ? (
+                <div className="login-selected">
+                  <div className="login-avatar small">{selectedUser.avatar}</div>
+                  <div>
+                    <div className="login-selected-name">{selectedUser.name}</div>
+                    <div className="login-selected-role">{selectedUser.email}</div>
+                  </div>
+                </div>
+              ) : (
+                <span className="login-placeholder">
+                  {selectedRole ? `${usersForRole.length} user${usersForRole.length !== 1 ? 's' : ''} available` : 'Select a role first'}
+                </span>
+              )}
+              <ChevronDown size={16} className={`login-chevron ${userOpen ? 'open' : ''}`} />
+            </div>
+            {userOpen && usersForRole.length > 0 && (
+              <div className="login-dropdown-list">
+                {usersForRole.map(u => (
                   <div
                     key={u.id}
-                    className={`login-dropdown-item ${selected?.id === u.id ? 'active' : ''}`}
-                    onClick={() => { setSelected(u); setOpen(false); }}
+                    className={`login-dropdown-item ${selectedUser?.id === u.id ? 'active' : ''}`}
+                    onClick={() => handleUserSelect(u)}
                   >
                     <div className="login-avatar">{u.avatar}</div>
                     <div className="login-user-info">
                       <div className="login-user-name">{u.name}</div>
-                      <div className="login-user-role">{ROLE_LABELS[u.role]}</div>
+                      <div className="login-user-role">{u.email}</div>
                     </div>
                   </div>
                 ))}
@@ -95,7 +166,7 @@ export default function Login() {
             <button
               className="login-btn"
               onClick={handleLogin}
-              disabled={!selected}
+              disabled={!selectedUser}
             >
               Enter Platform
             </button>

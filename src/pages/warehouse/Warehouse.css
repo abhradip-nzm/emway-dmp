@@ -33,3 +33,24 @@
 .receive-info-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.84rem; border-bottom: 1px solid var(--border-light); }
 .receive-info-row:last-child { border-bottom: none; }
 .receive-info-row span { color: var(--text-muted); }
+
+/* ── STOCK LEDGER ───────────────────────────────────── */
+.ledger-sku-info {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: var(--bg); border-radius: var(--radius-md);
+  padding: 14px 16px; margin-bottom: 18px;
+  border: 1px solid var(--border); gap: 2px 24px;
+}
+.ledger-info-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.84rem; border-bottom: 1px solid var(--border-light); }
+.ledger-info-row:last-child, .ledger-info-row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+.ledger-info-row span { color: var(--text-muted); }
+
+.ledger-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.ledger-section-title { font-family: var(--font-heading); font-size: 0.92rem; font-weight: 700; }
+
+.ledger-date { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+.ledger-ref  { font-family: monospace; font-size: 0.82rem; font-weight: 700; color: var(--primary); }
+.ledger-qty  { font-weight: 700; font-size: 0.88rem; }
+.ledger-qty.positive { color: var(--success); }
+.ledger-qty.negative { color: var(--danger); }
+.ledger-notes { font-size: 0.8rem; color: var(--text-secondary); max-width: 180px; }

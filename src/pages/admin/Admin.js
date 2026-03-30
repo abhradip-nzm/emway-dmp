@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
-import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section } from '../../components/common/Common';
+import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section, ExportBtn } from '../../components/common/Common';
 import { systemUsers, integrationStatus, auditLogs } from '../../data/mockData';
 import { ROLE_LABELS } from '../../context/AppContext';
 import { Users, Settings, Activity, Link2, Plus, Shield, RefreshCw } from 'lucide-react';
 import './Admin.css';
+
+const USER_EXPORT_COLUMNS = [
+  { key: 'name', label: 'Name' },
+  { key: 'email', label: 'Email' },
+  { key: 'role', label: 'Role' },
+  { key: 'status', label: 'Status' },
+  { key: 'lastLogin', label: 'Last Login' },
+];
+
+const AUDIT_EXPORT_COLUMNS = [
+  { key: 'time', label: 'Timestamp' },
+  { key: 'user', label: 'User' },
+  { key: 'action', label: 'Action' },
+  { key: 'detail', label: 'Details' },
+];
 
 function UserStatusBadge({ status }) {
   return <Badge type={status === 'active' ? 'success' : 'neutral'}>{status === 'active' ? 'Active' : 'Inactive'}</Badge>;
@@ -58,6 +73,7 @@ export default function Admin() {
         <Card noPad>
           <div className="table-toolbar">
             <SearchBar value={search} onChange={setSearch} placeholder="Search users by name, email, role..." />
+            <ExportBtn columns={USER_EXPORT_COLUMNS} data={filteredUsers} filename="users.csv" />
           </div>
           <DataTable
             columns={[
@@ -120,6 +136,10 @@ export default function Admin() {
       {/* ── AUDIT LOG TAB ── */}
       {tab === 'Audit Log' && (
         <Card noPad>
+          <div className="table-toolbar">
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Audit Events</span>
+            <ExportBtn columns={AUDIT_EXPORT_COLUMNS} data={auditLogs} filename="audit-log.csv" />
+          </div>
           <DataTable
             columns={[
               { key: 'time', label: 'Timestamp' },

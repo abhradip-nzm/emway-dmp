@@ -1,5 +1,5 @@
 .mb-24 { margin-bottom: 24px; }
-.chart-header { margin-bottom: 14px; }
+.chart-header { margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .chart-header h3 { font-family: var(--font-heading); font-size: 0.95rem; font-weight: 700; }
 .date-range-tabs { display: flex; gap: 4px; }
 .filter-tab { padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1.5px solid var(--border); background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }

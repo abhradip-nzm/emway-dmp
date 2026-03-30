@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useApp, ROLE_LABELS } from '../../context/AppContext';
 import { NAV_CONFIG } from '../../data/navConfig';
+
+const PATH_LABELS = {
+  '/dashboard': 'Dashboard',
+  '/inbound':   'Inbound & Procurement',
+  '/warehouse': 'Warehouse & Inventory',
+  '/orders':    'Order Management',
+  '/returns':   'Returns Management',
+  '/dispatch':  'Dispatch & Delivery',
+  '/reporting': 'Reports & Analytics',
+  '/admin':     'Platform Administration',
+};
 import {
   LayoutDashboard, PackageOpen, Warehouse, ShoppingCart, RotateCcw,
   Truck, BarChart3, Settings, Bell, LogOut, Menu, X, Package, ChevronRight
@@ -13,6 +24,8 @@ const ICON_MAP = { LayoutDashboard, PackageOpen, Warehouse, ShoppingCart, Rotate
 export default function AppLayout({ children }) {
   const { user, logout, notifications } = useApp();
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentLabel = PATH_LABELS[location.pathname] || 'Dashboard';
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [notifOpen, setNotifOpen] = useState(false);
 
@@ -107,6 +120,13 @@ export default function AppLayout({ children }) {
             </div>
           </div>
         </header>
+
+        {/* Breadcrumb */}
+        <div className="breadcrumb-bar">
+          <Link to="/dashboard" className="breadcrumb-home">Emway DMP</Link>
+          <ChevronRight size={12} className="breadcrumb-sep" />
+          <span className="breadcrumb-current">{currentLabel}</span>
+        </div>
 
         {/* Page content */}
         <main className="app-content">

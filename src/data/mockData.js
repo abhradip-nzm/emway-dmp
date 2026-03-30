@@ -22,6 +22,76 @@ export const skuInventory = [
   { sku: 'SPM-ZOM-22', product: 'Zomlings Series 7 Pack', brand: 'Spin Master', zone: 'D-01', location: 'D-01-05', stock: 42, reserved: 8, available: 34, reorderPoint: 60, status: 'low' },
 ];
 
+// ── STOCK LEDGER ─────────────────────────────────────────────────────────────
+export const stockLedger = {
+  'LEG-CLASS-42': [
+    { id: 1, date: '2025-03-28 10:30', type: 'pick',       reference: 'ORD-7821',     qty: -3,   balance: 12,  user: 'Kevin Ong',   notes: 'Shopee order pick' },
+    { id: 2, date: '2025-03-27 15:20', type: 'pick',       reference: 'ORD-7750',     qty: -4,   balance: 15,  user: 'Kevin Ong',   notes: 'Partner store pick' },
+    { id: 3, date: '2025-03-26 09:00', type: 'adjustment', reference: 'ADJ-021',      qty: -2,   balance: 19,  user: 'Priya Kumar', notes: 'Cycle count correction' },
+    { id: 4, date: '2025-03-25 11:00', type: 'return',     reference: 'RET-0192',     qty: +4,   balance: 21,  user: 'Kevin Ong',   notes: 'Damaged goods returned from Toys R Us' },
+    { id: 5, date: '2025-03-24 08:30', type: 'inbound',    reference: 'PO-2024-0880', qty: +17,  balance: 17,  user: 'Kevin Ong',   notes: 'Opening stock transfer' },
+  ],
+  'MAT-HOT-007': [
+    { id: 1, date: '2025-03-28 09:10', type: 'pick',       reference: 'ORD-7824',     qty: -8,   balance: 248, user: 'Kevin Ong',   notes: 'Own store replenishment' },
+    { id: 2, date: '2025-03-27 15:30', type: 'return',     reference: 'RET-0191',     qty: +1,   balance: 256, user: 'Kevin Ong',   notes: 'Wrong item returned' },
+    { id: 3, date: '2025-03-27 09:00', type: 'inbound',    reference: 'PO-2024-0892', qty: +200, balance: 255, user: 'Kevin Ong',   notes: 'Full receipt — Mattel Inc.' },
+    { id: 4, date: '2025-03-26 14:00', type: 'pick',       reference: 'ORD-7731',     qty: -1,   balance: 55,  user: 'Kevin Ong',   notes: 'Lazada order pick' },
+    { id: 5, date: '2025-03-25 10:00', type: 'adjustment', reference: 'ADJ-019',      qty: +3,   balance: 56,  user: 'Priya Kumar', notes: 'Found stock in Zone B audit' },
+  ],
+  'SPM-PAW-001': [
+    { id: 1, date: '2025-03-27 14:00', type: 'pick',       reference: 'ORD-7780',     qty: -10,  balance: 0,   user: 'Kevin Ong',   notes: 'Final units dispatched' },
+    { id: 2, date: '2025-03-26 11:30', type: 'pick',       reference: 'ORD-7762',     qty: -15,  balance: 10,  user: 'Kevin Ong',   notes: 'Shopee bulk order' },
+    { id: 3, date: '2025-03-24 09:00', type: 'inbound',    reference: 'PO-2024-0876', qty: +150, balance: 25,  user: 'Kevin Ong',   notes: 'Spin Master delivery' },
+    { id: 4, date: '2025-03-20 10:00', type: 'adjustment', reference: 'ADJ-016',      qty: -2,   balance: 0,   user: 'Priya Kumar', notes: 'Write-off — packaging damage' },
+  ],
+  'HAS-NERF-12': [
+    { id: 1, date: '2025-03-28 11:00', type: 'pick',       reference: 'ORD-7824',     qty: -12,  balance: 310, user: 'Kevin Ong',   notes: 'Own store order' },
+    { id: 2, date: '2025-03-27 09:00', type: 'return',     reference: 'RET-0189',     qty: +6,   balance: 322, user: 'Kevin Ong',   notes: 'Overstocked return from Emway Tampines' },
+    { id: 3, date: '2025-03-26 09:00', type: 'inbound',    reference: 'PO-2024-0894', qty: +300, balance: 316, user: 'Kevin Ong',   notes: 'Full receipt — Hasbro' },
+    { id: 4, date: '2025-03-25 14:00', type: 'pick',       reference: 'ORD-7698',     qty: -6,   balance: 16,  user: 'Kevin Ong',   notes: 'Lazada pick' },
+    { id: 5, date: '2025-03-24 08:00', type: 'inbound',    reference: 'PO-2024-0860', qty: +22,  balance: 22,  user: 'Kevin Ong',   notes: 'Opening balance transfer' },
+  ],
+  'BAN-GUN-55': [
+    { id: 1, date: '2025-03-28 10:00', type: 'pick',       reference: 'ORD-7826',     qty: -2,   balance: 34,  user: 'Kevin Ong',   notes: 'Lazada collectibles order' },
+    { id: 2, date: '2025-03-27 16:00', type: 'adjustment', reference: 'ADJ-020',      qty: -2,   balance: 36,  user: 'Priya Kumar', notes: 'Write-off — defective units' },
+    { id: 3, date: '2025-03-26 10:30', type: 'return',     reference: 'RET-0188',     qty: +2,   balance: 38,  user: 'Kevin Ong',   notes: 'Defective product return — holding for inspection' },
+    { id: 4, date: '2025-03-25 09:00', type: 'pick',       reference: 'ORD-7710',     qty: -5,   balance: 36,  user: 'Kevin Ong',   notes: 'Partner store pick' },
+    { id: 5, date: '2025-03-20 08:00', type: 'inbound',    reference: 'PO-2024-0858', qty: +41,  balance: 41,  user: 'Kevin Ong',   notes: 'Opening balance transfer' },
+  ],
+  'DIS-FRZ-008': [
+    { id: 1, date: '2025-03-28 09:30', type: 'pick',       reference: 'ORD-7825',     qty: -4,   balance: 88,  user: 'Kevin Ong',   notes: 'Shopee order' },
+    { id: 2, date: '2025-03-27 11:00', type: 'return',     reference: 'RET-0190',     qty: +2,   balance: 92,  user: 'Kevin Ong',   notes: 'Customer change of mind — good condition' },
+    { id: 3, date: '2025-03-26 14:00', type: 'pick',       reference: 'ORD-7710',     qty: -2,   balance: 90,  user: 'Kevin Ong',   notes: 'Lazada pick' },
+    { id: 4, date: '2025-03-24 09:00', type: 'pick',       reference: 'ORD-7688',     qty: -6,   balance: 92,  user: 'Kevin Ong',   notes: 'Partner store replenishment' },
+    { id: 5, date: '2025-03-20 08:00', type: 'inbound',    reference: 'PO-2024-0845', qty: +100, balance: 98,  user: 'Kevin Ong',   notes: 'Disney shipment — full receipt' },
+  ],
+  'MAT-BAR-XL1': [
+    { id: 1, date: '2025-03-28 10:00', type: 'pick',       reference: 'ORD-7823',     qty: -3,   balance: 27,  user: 'Kevin Ong',   notes: 'Toys R Us Orchard order' },
+    { id: 2, date: '2025-03-26 11:00', type: 'transfer',   reference: 'TRF-008',      qty: -5,   balance: 30,  user: 'David Ng',    notes: 'Transfer to Emway Jewel showroom' },
+    { id: 3, date: '2025-03-25 09:00', type: 'adjustment', reference: 'ADJ-018',      qty: +2,   balance: 35,  user: 'Priya Kumar', notes: 'Cycle count — found 2 units' },
+    { id: 4, date: '2025-03-22 08:00', type: 'inbound',    reference: 'PO-2024-0840', qty: +33,  balance: 33,  user: 'Kevin Ong',   notes: 'Mattel delivery — full receipt' },
+  ],
+  'LEG-CITY-88': [
+    { id: 1, date: '2025-03-27 14:00', type: 'pick',       reference: 'ORD-7781',     qty: -20,  balance: 0,   user: 'Kevin Ong',   notes: 'Final units dispatched to PopMart' },
+    { id: 2, date: '2025-03-26 10:00', type: 'pick',       reference: 'ORD-7762',     qty: -30,  balance: 20,  user: 'Kevin Ong',   notes: 'Partner store bulk order' },
+    { id: 3, date: '2025-03-25 09:00', type: 'adjustment', reference: 'ADJ-017',      qty: -5,   balance: 50,  user: 'Priya Kumar', notes: 'Shrinkage — cycle count' },
+    { id: 4, date: '2025-03-22 08:00', type: 'inbound',    reference: 'PO-2024-0835', qty: +55,  balance: 55,  user: 'Kevin Ong',   notes: 'LEGO delivery — partial 55/120' },
+  ],
+  'WME-BAT-003': [
+    { id: 1, date: '2025-03-28 09:00', type: 'pick',       reference: 'ORD-7822',     qty: -5,   balance: 156, user: 'Kevin Ong',   notes: 'Lazada high priority order' },
+    { id: 2, date: '2025-03-27 14:00', type: 'pick',       reference: 'ORD-7804',     qty: -8,   balance: 161, user: 'Kevin Ong',   notes: 'Shopee order' },
+    { id: 3, date: '2025-03-26 11:00', type: 'inbound',    reference: 'PO-2024-0870', qty: +80,  balance: 169, user: 'Kevin Ong',   notes: 'Warner Media delivery' },
+    { id: 4, date: '2025-03-25 10:00', type: 'pick',       reference: 'ORD-7789',     qty: -6,   balance: 89,  user: 'Kevin Ong',   notes: 'Own store pick' },
+    { id: 5, date: '2025-03-20 08:00', type: 'inbound',    reference: 'PO-2024-0820', qty: +95,  balance: 95,  user: 'Kevin Ong',   notes: 'Opening balance' },
+  ],
+  'SPM-ZOM-22': [
+    { id: 1, date: '2025-03-28 10:00', type: 'pick',       reference: 'ORD-7827',     qty: -4,   balance: 42,  user: 'Kevin Ong',   notes: 'PopMart Bugis order' },
+    { id: 2, date: '2025-03-27 09:00', type: 'pick',       reference: 'ORD-7800',     qty: -3,   balance: 46,  user: 'Kevin Ong',   notes: 'Shopee pick' },
+    { id: 3, date: '2025-03-26 14:00', type: 'adjustment', reference: 'ADJ-022',      qty: -2,   balance: 49,  user: 'Priya Kumar', notes: 'Write-off — packaging damage' },
+    { id: 4, date: '2025-03-24 09:00', type: 'inbound',    reference: 'PO-2024-0855', qty: +55,  balance: 51,  user: 'Kevin Ong',   notes: 'Spin Master delivery — full receipt' },
+  ],
+};
+
 export const warehouseZones = [
   { zone: 'A', description: 'Dolls & Figures', locations: 12, capacity: 85 },
   { zone: 'B', description: 'Vehicles & Sets', locations: 18, capacity: 72 },

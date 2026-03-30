@@ -1,8 +1,26 @@
 import React, { useState } from 'react';
-import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section } from '../../components/common/Common';
+import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section, ExportBtn, StatusTimeline } from '../../components/common/Common';
 import { deliveryRuns, orders } from '../../data/mockData';
 import { Truck, CheckCircle2, Clock, Plus, MapPin, Package, AlertCircle } from 'lucide-react';
 import './Dispatch.css';
+
+const DISPATCH_TIMELINE_STEPS = [
+  { key: 'draft', label: 'Draft' },
+  { key: 'scheduled', label: 'Scheduled' },
+  { key: 'in_progress', label: 'In Progress' },
+  { key: 'completed', label: 'Completed' },
+];
+
+const EXPORT_COLUMNS = [
+  { key: 'id', label: 'Run ID' },
+  { key: 'date', label: 'Date' },
+  { key: 'driver', label: 'Driver' },
+  { key: 'vehicle', label: 'Vehicle' },
+  { key: 'orders', label: 'Orders', exportRender: v => v.join('; ') },
+  { key: 'dispatched', label: 'Dispatched At' },
+  { key: 'completed', label: 'Completed At' },
+  { key: 'status', label: 'Status' },
+];
 
 function RunStatusBadge({ status }) {
   const map = {
@@ -49,6 +67,7 @@ export default function Dispatch() {
       <Card noPad>
         <div className="table-toolbar">
           <SearchBar value={search} onChange={setSearch} placeholder="Search run ID or driver..." />
+          <ExportBtn columns={EXPORT_COLUMNS} data={filtered} filename="delivery-runs.csv" />
         </div>
         <DataTable
           columns={[
@@ -73,6 +92,7 @@ export default function Dispatch() {
       <Modal open={showDetail} onClose={() => setShowDetail(false)} title={`Delivery Run — ${selectedRun?.id}`} width={620}>
         {selectedRun && (
           <div>
+            <StatusTimeline steps={DISPATCH_TIMELINE_STEPS} currentKey={selectedRun.status} />
             <div className="run-header-row">
               <RunStatusBadge status={selectedRun.status} />
               <span className="run-date">{selectedRun.date}</span>

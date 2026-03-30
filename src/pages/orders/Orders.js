@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
-import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section } from '../../components/common/Common';
+import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section, ExportBtn } from '../../components/common/Common';
 import { orders } from '../../data/mockData';
 import { ShoppingCart, Plus, AlertTriangle, CheckCircle2, Package, ScanLine, Clock } from 'lucide-react';
 import './Orders.css';
+
+const EXPORT_COLUMNS = [
+  { key: 'id', label: 'Order ID' },
+  { key: 'channel', label: 'Channel' },
+  { key: 'customer', label: 'Customer' },
+  { key: 'items', label: 'Items' },
+  { key: 'value', label: 'Value (SGD)' },
+  { key: 'priority', label: 'Priority' },
+  { key: 'created', label: 'Created' },
+  { key: 'assigned', label: 'Assigned To' },
+  { key: 'status', label: 'Status' },
+];
 
 function ChannelBadge({ channel }) {
   const map = { shopee: ['shopee','Shopee'], lazada: ['lazada','Lazada'], partner_store: ['partner','Partner Store'], own_store: ['own','Own Store'] };
@@ -77,12 +89,15 @@ export default function Orders() {
       <Card noPad>
         <div className="table-toolbar">
           <SearchBar value={search} onChange={setSearch} placeholder="Search order ID, customer..." />
-          <div className="filter-tabs">
-            {['all','pending','confirmed','picking','packing','dispatched'].map(f => (
-              <button key={f} className={`filter-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
-                {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
-              </button>
-            ))}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <div className="filter-tabs">
+              {['all','pending','confirmed','picking','packing','dispatched'].map(f => (
+                <button key={f} className={`filter-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
+                  {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+            </div>
+            <ExportBtn columns={EXPORT_COLUMNS} data={filtered} filename="orders.csv" />
           </div>
         </div>
         <DataTable

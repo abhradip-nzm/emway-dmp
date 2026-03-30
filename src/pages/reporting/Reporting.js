@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PageHeader, Card, StatCard, Section, Badge } from '../../components/common/Common';
+import { PageHeader, Card, StatCard, Section, Badge, ExportBtn, exportCSV } from '../../components/common/Common';
 import { kpiData, salesChartData, fulfilmentChartData, skuInventory, returns, orders } from '../../data/mockData';
 import { TrendingUp, ShoppingCart, RotateCcw, CheckCircle2, Package, BarChart3 } from 'lucide-react';
 import {
@@ -54,6 +54,11 @@ export default function Reporting() {
         <Card>
           <div className="chart-header">
             <h3>Sales by Channel — Last 6 Months</h3>
+            <ExportBtn
+              columns={[{ key: 'month', label: 'Month' }, { key: 'partner', label: 'Partner Stores (SGD)' }, { key: 'ownStore', label: 'Own Stores (SGD)' }, { key: 'shopee', label: 'Shopee (SGD)' }, { key: 'lazada', label: 'Lazada (SGD)' }]}
+              data={salesChartData}
+              filename="sales-by-channel.csv"
+            />
           </div>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={salesChartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
@@ -78,7 +83,14 @@ export default function Reporting() {
         </Card>
 
         <Card>
-          <div className="chart-header"><h3>Revenue Share by Channel</h3></div>
+          <div className="chart-header">
+            <h3>Revenue Share by Channel</h3>
+            <ExportBtn
+              columns={[{ key: 'name', label: 'Channel' }, { key: 'value', label: 'Revenue (SGD)' }]}
+              data={channelShare}
+              filename="revenue-by-channel.csv"
+            />
+          </div>
           <div className="pie-wrapper">
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
@@ -104,7 +116,14 @@ export default function Reporting() {
       {/* Fulfilment + Inventory */}
       <div className="grid-2 mb-24">
         <Card>
-          <div className="chart-header"><h3>Daily Fulfilment Rate — Last 7 Days</h3></div>
+          <div className="chart-header">
+            <h3>Daily Fulfilment Rate — Last 7 Days</h3>
+            <ExportBtn
+              columns={[{ key: 'day', label: 'Day' }, { key: 'rate', label: 'Fulfilment Rate (%)' }]}
+              data={fulfilmentChartData}
+              filename="fulfilment-rate.csv"
+            />
+          </div>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={fulfilmentChartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f1f8" />
@@ -144,7 +163,14 @@ export default function Reporting() {
       {/* Returns breakdown */}
       <div className="grid-2 mb-24">
         <Card>
-          <div className="chart-header"><h3>Returns by Condition</h3></div>
+          <div className="chart-header">
+            <h3>Returns by Condition</h3>
+            <ExportBtn
+              columns={[{ key: 'name', label: 'Condition' }, { key: 'value', label: 'Count' }]}
+              data={returnConditionData}
+              filename="returns-by-condition.csv"
+            />
+          </div>
           <div className="pie-wrapper">
             <ResponsiveContainer width="100%" height={180}>
               <PieChart>

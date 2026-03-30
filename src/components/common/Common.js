@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, Download } from 'lucide-react';
 import './Common.css';
 
 // ── PAGE HEADER ────────────────────────────────────────
@@ -198,4 +198,58 @@ export function ProgressBar({ value, max = 100, color = 'primary' }) {
 // ── TAG ───────────────────────────────────────────────
 export function Tag({ children, color = 'default' }) {
   return <span className={`tag tag-${color}`}>{children}</span>;
+}
+
+// ── EXPORT CSV ────────────────────────────────────────
+export function exportCSV(columns, data, filename = 'export.csv') {
+  const exportCols = columns.filter(c => c.label && c.label.trim());
+  const headers = exportCols.map(c => c.label);
+  const rows = data.map(row =>
+    exportCols.map(c => {
+      const val = c.exportRender ? c.exportRender(row[c.key], row) : row[c.key];
+      if (val === null || val === undefined) return '';
+      if (Array.isArray(val)) return val.join('; ');
+      return String(val);
+    })
+  );
+  const csv = [headers, ...rows]
+    .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+    .join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+export function ExportBtn({ columns, data, filename }) {
+  return (
+    <button className="btn btn-outline btn-sm" onClick={() => exportCSV(columns, data, filename)}>
+      <Download size={14} />
+      Export CSV
+    </button>
+  );
+}
+
+// ── STATUS TIMELINE ───────────────────────────────────
+export function StatusTimeline({ steps, currentKey }) {
+  const currentIndex = steps.findIndex(s => s.key === currentKey);
+  return (
+    <div className="status-timeline">
+      {steps.map((step, i) => {
+        const isDone = i < currentIndex;
+        const isActive = i === currentIndex;
+        return (
+          <div key={step.key} className={`st-step ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}`}>
+            <div className="st-dot">{isDone ? '✓' : i + 1}</div>
+            <span className="st-label">{step.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
 }

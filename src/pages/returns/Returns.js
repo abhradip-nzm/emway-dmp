@@ -1,8 +1,34 @@
 import React, { useState } from 'react';
-import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section } from '../../components/common/Common';
+import { PageHeader, Card, Badge, DataTable, Btn, SearchBar, StatCard, Modal, FormField, Input, Select, Section, ExportBtn, StatusTimeline } from '../../components/common/Common';
 import { returns } from '../../data/mockData';
 import { RotateCcw, CheckCircle2, AlertTriangle, Plus, ScanLine, DollarSign, XCircle } from 'lucide-react';
 import './Returns.css';
+
+const RETURNS_TIMELINE_STEPS = [
+  { key: 'pending_finance', label: 'Pending Finance' },
+  { key: 'approved', label: 'Credit Note Approved' },
+  { key: 'restocked', label: 'Restocked' },
+];
+const RETURNS_WRITEOFF_STEPS = [
+  { key: 'pending_finance', label: 'Pending Finance' },
+  { key: 'approved', label: 'Approved' },
+  { key: 'write_off', label: 'Written Off' },
+];
+
+const EXPORT_COLUMNS = [
+  { key: 'id', label: 'Return ID' },
+  { key: 'orderId', label: 'Order Ref' },
+  { key: 'customer', label: 'Customer' },
+  { key: 'channel', label: 'Channel' },
+  { key: 'product', label: 'Product' },
+  { key: 'sku', label: 'SKU' },
+  { key: 'qty', label: 'Qty' },
+  { key: 'reason', label: 'Reason' },
+  { key: 'condition', label: 'Condition' },
+  { key: 'creditValue', label: 'Credit Value (SGD)' },
+  { key: 'status', label: 'Status' },
+  { key: 'created', label: 'Created' },
+];
 
 function ConditionBadge({ condition }) {
   const map = { good: ['success','✓ Good Stock'], damaged: ['danger','✗ Damaged'], clearance: ['warning','⚠ Clearance'] };
@@ -62,12 +88,15 @@ export default function Returns() {
       <Card noPad>
         <div className="table-toolbar">
           <SearchBar value={search} onChange={setSearch} placeholder="Search return ID, customer, product..." />
-          <div className="filter-tabs">
-            {['all','pending_finance','approved','restocked','write_off'].map(f => (
-              <button key={f} className={`filter-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
-                {f === 'all' ? 'All' : f === 'pending_finance' ? 'Pending' : f === 'write_off' ? 'Write-Off' : f.charAt(0).toUpperCase() + f.slice(1)}
-              </button>
-            ))}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <div className="filter-tabs">
+              {['all','pending_finance','approved','restocked','write_off'].map(f => (
+                <button key={f} className={`filter-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
+                  {f === 'all' ? 'All' : f === 'pending_finance' ? 'Pending' : f === 'write_off' ? 'Write-Off' : f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+            </div>
+            <ExportBtn columns={EXPORT_COLUMNS} data={filtered} filename="returns.csv" />
           </div>
         </div>
         <DataTable
@@ -94,6 +123,10 @@ export default function Returns() {
       <Modal open={showDetailModal} onClose={() => setShowDetailModal(false)} title={`Return Detail — ${selectedReturn?.id}`} width={600}>
         {selectedReturn && (
           <div>
+            <StatusTimeline
+              steps={selectedReturn.status === 'write_off' ? RETURNS_WRITEOFF_STEPS : RETURNS_TIMELINE_STEPS}
+              currentKey={selectedReturn.status}
+            />
             <div className="return-status-bar">
               <StatusBadge status={selectedReturn.status} />
               <ConditionBadge condition={selectedReturn.condition} />

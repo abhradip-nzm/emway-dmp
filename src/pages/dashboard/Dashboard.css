@@ -1,6 +1,6 @@
 .mb-24 { margin-bottom: 24px; }
 
-.chart-header { margin-bottom: 16px; }
+.chart-header { margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .chart-header h3 { font-family: var(--font-heading); font-size: 0.95rem; font-weight: 700; }
 
 .activity-row {
