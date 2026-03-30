@@ -1,0 +1,45 @@
+.mb-24 { margin-bottom: 24px; }
+
+.table-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  gap: 12px; flex-wrap: wrap;
+}
+
+.filter-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.filter-tab {
+  padding: 6px 14px; border-radius: 20px; font-size: 0.78rem;
+  font-weight: 600; border: 1.5px solid var(--border);
+  background: transparent; color: var(--text-secondary); cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-tab:hover { border-color: var(--primary); color: var(--primary); }
+.filter-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+.po-id { font-weight: 700; color: var(--primary); font-size: 0.82rem; }
+.received-tag { font-size: 0.78rem; color: var(--success); font-weight: 600; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+@media (max-width: 500px) { .form-grid { grid-template-columns: 1fr; } }
+
+.modal-footer { display: flex; gap: 10px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--border); }
+
+.receive-po-info {
+  background: var(--bg); border-radius: var(--radius-md); padding: 14px 16px;
+  margin-bottom: 20px; border: 1px solid var(--border);
+}
+.receive-info-row {
+  display: flex; justify-content: space-between; padding: 5px 0;
+  font-size: 0.84rem; border-bottom: 1px solid var(--border-light);
+}
+.receive-info-row:last-child { border-bottom: none; }
+.receive-info-row span { color: var(--text-muted); }
+.receive-info-row strong { color: var(--text-primary); }
+
+.scan-section { margin-bottom: 20px; }
+.scan-section h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+.scan-input-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+.scan-input-wrapper { flex: 1; display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--primary); border-radius: var(--radius-md); padding: 8px 14px; background: var(--primary-subtle); }
+.scan-prefix { color: var(--primary); flex-shrink: 0; }
+.scan-input { border: none; background: transparent; font-size: 0.88rem; flex: 1; outline: none; }
+.scan-hint { font-size: 0.75rem; color: var(--text-muted); }

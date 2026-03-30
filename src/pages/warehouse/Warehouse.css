@@ -1,0 +1,35 @@
+.zone-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 0;
+}
+@media (max-width: 1100px) { .zone-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 700px)  { .zone-grid { grid-template-columns: repeat(2,1fr); } }
+
+.zone-card { padding: 16px !important; }
+.zone-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.zone-badge {
+  background: var(--primary); color: #fff; font-size: 0.72rem;
+  font-weight: 800; padding: 3px 10px; border-radius: 20px;
+  font-family: var(--font-heading); letter-spacing: 0.04em;
+}
+.zone-capacity-pct { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; color: var(--text-primary); }
+.zone-desc { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px; }
+.zone-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; }
+
+.sku-code-cell { font-family: monospace; font-size: 0.82rem; font-weight: 700; color: var(--primary); }
+
+/* shared */
+.mb-24 { margin-bottom: 24px; }
+.table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
+.filter-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.filter-tab { padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1.5px solid var(--border); background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
+.filter-tab:hover { border-color: var(--primary); color: var(--primary); }
+.filter-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.modal-footer { display: flex; gap: 10px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--border); }
+.receive-po-info { background: var(--bg); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px; border: 1px solid var(--border); }
+.receive-info-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.84rem; border-bottom: 1px solid var(--border-light); }
+.receive-info-row:last-child { border-bottom: none; }
+.receive-info-row span { color: var(--text-muted); }

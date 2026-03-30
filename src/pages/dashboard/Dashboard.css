@@ -1,0 +1,51 @@
+.mb-24 { margin-bottom: 24px; }
+
+.chart-header { margin-bottom: 16px; }
+.chart-header h3 { font-family: var(--font-heading); font-size: 0.95rem; font-weight: 700; }
+
+.activity-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid var(--border-light);
+  gap: 12px;
+}
+.activity-row:last-child { border-bottom: none; }
+.activity-id { font-size: 0.82rem; font-weight: 700; color: var(--primary); margin-right: 8px; }
+.activity-detail { font-size: 0.8rem; color: var(--text-secondary); }
+
+.task-card {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px; border: 1px solid var(--border);
+  border-radius: var(--radius-md); margin-bottom: 10px;
+  transition: box-shadow 0.15s;
+}
+.task-card:hover { box-shadow: var(--shadow-md); }
+.task-card-left { display: flex; flex-direction: column; gap: 4px; }
+.task-id { font-size: 0.82rem; font-weight: 700; color: var(--primary); }
+.task-channel { margin-top: 2px; }
+.task-items { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+
+.inv-health-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+  margin-bottom: 20px;
+}
+.inv-health-item {
+  text-align: center; padding: 16px 12px; border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+.inv-health-item.healthy { background: var(--success-bg); border-color: #bbf7d0; }
+.inv-health-item.low     { background: var(--warning-bg); border-color: #fde68a; }
+.inv-health-item.out     { background: var(--danger-bg);  border-color: #fecaca; }
+.inv-health-count {
+  display: block; font-family: var(--font-heading); font-size: 2rem;
+  font-weight: 800; line-height: 1;
+}
+.inv-health-item.healthy .inv-health-count { color: var(--success); }
+.inv-health-item.low     .inv-health-count { color: var(--warning); }
+.inv-health-item.out     .inv-health-count { color: var(--danger);  }
+.inv-health-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; color: var(--text-muted); display: block; }
+
+.top-skus h4 { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+.sku-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-light); }
+.sku-row:last-child { border-bottom: none; }
+.sku-name { font-size: 0.82rem; font-weight: 600; }
+.sku-code { font-size: 0.72rem; color: var(--text-muted); }

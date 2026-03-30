@@ -1,0 +1,28 @@
+.mb-24 { margin-bottom: 24px; }
+.run-id { font-weight: 700; color: var(--primary); font-size: 0.82rem; }
+.run-header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.run-date { font-size: 0.85rem; color: var(--text-secondary); }
+.run-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+@media (max-width: 500px) { .run-info-grid { grid-template-columns: 1fr; } }
+.run-orders-panel { background: var(--bg); border-radius: var(--radius-md); border: 1px solid var(--border); padding: 14px; }
+.run-orders-panel h4 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 10px; }
+.run-order-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-light); }
+.run-order-item:last-child { border-bottom: none; }
+.run-order-id { font-size: 0.82rem; font-weight: 700; color: var(--primary); margin-right: 8px; }
+.run-order-customer { font-size: 0.8rem; color: var(--text-secondary); }
+.run-actions { display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 16px; }
+
+.packed-orders-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
+.packed-order-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: background 0.15s; }
+.packed-order-row:hover { background: var(--bg); }
+.packed-order-row input { cursor: pointer; }
+.packed-order-row label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; }
+
+/* shared */
+.table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.modal-footer { display: flex; gap: 10px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--border); }
+.receive-po-info { background: var(--bg); border-radius: var(--radius-md); padding: 14px 16px; border: 1px solid var(--border); }
+.receive-info-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.84rem; border-bottom: 1px solid var(--border-light); }
+.receive-info-row:last-child { border-bottom: none; }
+.receive-info-row span { color: var(--text-muted); }
